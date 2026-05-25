@@ -1,1 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Diário Oficial — Avaré</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --ink: #0f1117;
+            --ink-soft: #3d4047;
+            --ink-muted: #8a8d96;
+            --paper: #faf9f6;
+            --paper-warm: #f3f1eb;
+            --line: #e3e0d8;
+            --accent: #c0392b;
+            --accent-soft: #f9eae8;
+            --accent-border: #e8b4ae;
+            --blue: #1a4a7a;
+            --blue-soft: #e8f0f8;
+            --green: #1e5c3a;
+            --green-soft: #e7f4ed;
+            --amber: #7a4f00;
+            --amber-soft: #fdf3e3;
+            --purple: #4a2a6e;
+            --purple-soft: #f0e8f8;
+            --slate: #2c3344;
+            --slate-soft: #eceef2;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--paper);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+
+        header {
+            background: var(--ink);
+            color: var(--paper);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-rule {
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+        }
+
+        .header-brand h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #fff;
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .city {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* HERO */
+
+        .hero {
+            background: var(--ink);
+            padding: 56px 32px 64px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+        }
+
+        /* FILTROS */
+
+        .filters-section {
+            background: var(--paper-warm);
+            border-bottom: 1px solid var(--line);
+            padding: 24px 32px;
+        }
+
+        .filters-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .filter-group input {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            height: 40px;
+        }
+
+        #pesquisa {
+            width: 280px;
+        }
+
+        #dataInicio,
+        #dataFim {
+            width: 160px;
+        }
+
+        .btn-filter {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0 22px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        /* RESULTADOS */
+
+        .results-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 32px 80px;
+        }
+
+        .results-header {
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .results-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        /* ALTERADO PARA APENAS UMA COLUNA */
+
+        #resultado {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* CARD */
+
+        .card-edicao {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+
+        .card-edicao:hover {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 22px 24px 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .card-date {
+            font-size: 13px;
+            color: var(--ink-muted);
+        }
+
+        .btn-open {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            border: 1px solid var(--accent-border);
+            background: var(--accent-soft);
+            border-radius: 6px;
+            padding: 7px 13px;
+            height: fit-content;
+        }
+
+        .toggle-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--paper-warm);
+            border: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-body {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-edicao.open .card-body {
+            max-height: 2000px;
+            padding: 18px 24px 22px;
+        }
+
+        .categoria-block {
+            margin-bottom: 16px;
+        }
+
+        .categoria-pill {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            padding: 4px 9px;
+            margin-bottom: 10px;
+        }
+
+        .pill-leis {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .pill-licitacoes {
+            background: var(--amber-soft);
+            color: var(--amber);
+        }
+
+        .pill-contratos {
+            background: var(--blue-soft);
+            color: var(--blue);
+        }
+
+        .pill-nomeacoes {
+            background: var(--purple-soft);
+            color: var(--purple);
+        }
+
+        .pill-outros {
+            background: var(--slate-soft);
+            color: var(--slate);
+        }
+
+        .categoria-items {
+            list-style: none;
+        }
+
+        .categoria-items li {
+            font-size: 14px;
+            margin-bottom: 6px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .categoria-items li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 5px;
+            height: 1px;
+            background: var(--ink-muted);
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: var(--ink);
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 24px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+
+            .hero h2 {
+                font-size: 30px;
+            }
+
+            .filters-inner {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #pesquisa,
+            #dataInicio,
+            #dataFim {
+                width: 100%;
+            }
+
+            .results-section {
+                padding: 28px 20px 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-rule"></div>
+
+<header>
+    <div class="header-inner">
+        <div class="header-brand">
+            <h1>Diário Oficial</h1>
+            <div class="divider"></div>
+            <span class="city">Avaré — SP</span>
+        </div>
+
+        <span class="header-meta">
+            Semanário Municipal
+        </span>
+    </div>
+</header>
+
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-eyebrow">Consulta Pública</div>
+
+        <h2>Publicações Oficiais</h2>
+
+        <p>
+            Acesse leis, decretos, licitações, contratos e nomeações publicados pelo município de Avaré.
+        </p>
+    </div>
+</div>
+
+<div class="filters-section">
+    <div class="filters-inner">
+
+        <div class="filter-group">
+            <label>Pesquisar</label>
+            <input type="text" id="pesquisa" placeholder="Lei, decreto, assunto...">
+        </div>
+
+        <div class="filter-group">
+            <label>Data inicial</label>
+            <input type="date" id="dataInicio">
+        </div>
+
+        <div class="filter-group">
+            <label>Data final</label>
+            <input type="date" id="dataFim">
+        </div>
+
+        <button class="btn-filter" onclick="filtrarDados()">
+            Filtrar
+        </button>
+
+    </div>
+</div>
+
+<div class="results-section">
+
+    <div class="results-header">
+        <span class="results-label" id="results-count">
+            Carregando edições…
+        </span>
+    </div>
+
+    <div id="resultado"></div>
+
+</div>
+
+<footer>
+    <strong>Diário Oficial de Avaré</strong>
+    — Semanário Municipal de Publicações Legais
+</footer>
+
+<script>
+    let diarios = [];
+
+    async function carregarJSON() {
+
+        try {
+
+            const response = await fetch('/api/diarios');
+
+            if (!response.ok) {
+                throw new Error('Erro ao carregar');
+            }
+
+            diarios = await response.json();
+
+            renderizar(diarios);
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            document.getElementById('resultado').innerHTML = `
+                <p>Erro ao carregar os dados.</p>
+            `;
+        }
+    }
+
+    const CATEGORIAS = {
+        leis_e_decretos: {
+            label: 'Leis e decretos',
+            cls: 'pill-leis'
+        },
+
+        licitacoes: {
+            label: 'Licitações',
+            cls: 'pill-licitacoes'
+        },
+
+        contratos: {
+            label: 'Contratos',
+            cls: 'pill-contratos'
+        },
+
+        nomeacoes: {
+            label: 'Nomeações',
+            cls: 'pill-nomeacoes'
+        },
+
+        outros: {
+            label: 'Outros',
+            cls: 'pill-outros'
+        },
+    };
+
+    function renderizar(lista) {
+
+        const resultado = document.getElementById('resultado');
+
+        document.getElementById('results-count').textContent =
+            `${lista.length} edição(ões) encontrada(s)`;
+
+        resultado.innerHTML = lista.map(item => {
+
+            let categorias = '';
+
+            Object.entries(item.resumo).forEach(([chave, valores]) => {
+
+                if (!valores || valores.length === 0) return;
+
+                const cat = CATEGORIAS[chave] || {
+                    label: chave,
+                    cls: 'pill-outros'
+                };
+
+                categorias += `
+                    <div class="categoria-block">
+
+                        <span class="categoria-pill ${cat.cls}">
+                            ${cat.label}
+                        </span>
+
+                        <ul class="categoria-items">
+                            ${valores.map(v => `<li>${v}</li>`).join('')}
+                        </ul>
+
+                    </div>
+                `;
+            });
+
+            return `
+                <div class="card-edicao">
+
+                    <div class="card-header" onclick="toggleCard(this)">
+
+                        <div>
+
+                            <div class="card-title">
+                                ${item.titulo}
+                            </div>
+
+                            <div class="card-date">
+                                ${item.data}
+                            </div>
+
+                        </div>
+
+                        <div style="display:flex;gap:10px;align-items:center;">
+
+                            <a href="${item.link}"
+                               target="_blank"
+                               class="btn-open"
+                               onclick="event.stopPropagation()">
+
+                               Abrir
+                            </a>
+
+                            <div class="toggle-icon">
+                                ▼
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        ${categorias}
+                    </div>
+
+                </div>
+            `;
+
+        }).join('');
+    }
+
+    function toggleCard(header) {
+
+        const card = header.closest('.card-edicao');
+
+        card.classList.toggle('open');
+    }
+
+    function filtrarDados() {
+
+        const pesquisa = document
+            .getElementById('pesquisa')
+            .value
+            .toLowerCase();
+
+        const filtrados = diarios.filter(item => {
+
+            return JSON.stringify(item)
+                .toLowerCase()
+                .includes(pesquisa);
+        });
+
+        renderizar(filtrados);
+    }
+
+    carregarJSON();
+</script>
+
+</body>
+</html>
